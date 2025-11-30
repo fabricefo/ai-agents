@@ -8,8 +8,11 @@ except ImportError:
     from tools import tavily_search, yfinance_data
 
 # --- Define the LLM for all agents --- 
-openai_llm = LLM(
-    api_key=os.getenv("OPEN_API_KEY"),
+openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    raise ValueError("OPENAI_API_KEY environment variable is not set.")
+llm = LLM(
+    api_key=openai_api_key,
     model="gpt-4o-mini",  
     temperature=0
 )
@@ -23,7 +26,7 @@ research_analyst = Agent(
         "and market trends from various sources."
     ),
     tools=[tavily_search, yfinance_data], # type: ignore
-    llm=openai_llm,
+    llm=llm,
     verbose=True
 )
 
@@ -34,7 +37,7 @@ investment_stratergist = Agent(
         "An expert stratergist with a deep understanding of market dynamics, able to "
         "synthesize complex data into a clear 'buy', 'sell', or 'hold' recommendation."
     ),
-    llm=openai_llm,
+    llm=llm,
     verbose=True
 )
 
@@ -45,6 +48,6 @@ report_writer = Agent(
         "A professional communicator who turns complex analysis into a consice, easy-to-read "
         "report for high-level decision-makers."
     ),
-    llm=openai_llm,
+    llm=llm,
     verbose=True
 )

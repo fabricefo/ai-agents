@@ -1,8 +1,11 @@
 crewai
 langgraph
 autogen-agentchat
+autogen
 langchain-community
+langchain-openai
 yfinance
 tavily-python
 python-dotenv
 pydantic
+rich

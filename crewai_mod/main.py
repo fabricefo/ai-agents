@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from crewai import Crew, Process
+from rich import print
 
 # Handle both relative and absolute imports
 try:

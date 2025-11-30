@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from rich import print
 
 # Handle both relative and absolute imports
 try:
@@ -12,7 +13,7 @@ except ImportError:
 # Load environment variables
 load_dotenv()
 
-def run_langgraph(ticket):
+def run_langgraph(ticker):
     print(f"[bold blue]Run Langgraph[/bold blue]")
     app = create_workflow()
     initial_state: StockAnalysisState = {"ticker": ticker}
@@ -27,8 +28,8 @@ if __name__ == "__main__":
     print("=" * 50)
     
     # Get user input for the stock ticker
-    ticker = input("Enter ticker for which you want recommendations : ")
-    results = run_langgraph(ticker)
+    stock_ticker = input("Enter ticker for which you want recommendations : ")
+    results = run_langgraph(stock_ticker)
 
     print("=" * 50)
     print("\n[bold yellow]✅ --- FINAL RESULTS ---[/bold yellow]")

@@ -39,26 +39,32 @@ ai-agent-comparision/
 
 #### CrewAI
 ```bash
-uv run crewai/main.py
+uv run crewai_mod/main.py
 ```
 - **Prompt:** Enter a stock ticker (e.g. NVDA, AAPL)
 - **Output:** Executive summary and recommendation
 
 #### LangGraph
 ```bash
-uv run langgraph/main.py
+uv run langgraph_mod/main.py
 ```
 - **Prompt:** Enter a stock ticker
 - **Output:** Analysis and recommendation
 
 #### AutoGen
 ```bash
-uv run autogen/main.py
+uv run autogen_mod/main.py
 ```
 - **Prompt:** Enter a stock ticker
 - **Output:** Analyst/Researcher group chat, final report
 
 ---
+
+### 3. Running All Implementations
+
+```bash
+uv run start.py
+```
 
 ## 🧩 Framework Comparison Table
 

@@ -1,6 +1,10 @@
 import os
 from pydantic import SecretStr
 from langchain_openai import ChatOpenAI
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Handle both relative and absolute imports
 try:
@@ -12,6 +16,9 @@ except ImportError:
 
 # Initialize the LLM once here for all nodes
 openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    raise ValueError("OPENAI_API_KEY environment variable is not set.")
+
 llm = ChatOpenAI(
     model="gpt-4o-mini",
     api_key=openai_api_key

@@ -1,5 +1,6 @@
 import os
 from dotenv import load_dotenv
+from rich import print
 
 # Handle both relative and absolute imports
 try:
@@ -11,7 +12,6 @@ except ImportError:
 
 # --- Load environment variables ---
 load_dotenv()
-
 
 def run_autogen(ticker):
     print(f"[bold blue]Run Autogen[/bold blue]")
@@ -27,13 +27,13 @@ def run_autogen(ticker):
 
     # --- Create group chat and manager ---
     manager = create_workflow(researcher, analyst)
-    print("[INFO] GroupChat and Manager initialized. Starting the analysis...\n")
 
     # --- Launch the agent conversation ---
-    user_proxy.initiate_chat(
+    results = user_proxy.initiate_chat(
         manager,
         message=message
     )
+    return results
 
 
 # --- Start conversation ---
