@@ -1,0 +1,8 @@
+crewai
+langgraph
+autogen-agentchat
+langchain-community
+yfinance
+tavily-python
+python-dotenv
+pydantic
