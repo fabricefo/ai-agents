@@ -58,6 +58,13 @@ uv run autogen_mod/main.py
 - **Prompt:** Enter a stock ticker
 - **Output:** Analyst/Researcher group chat, final report
 
+#### Agno
+```bash
+uv run agon_mod/main.py
+```
+- **Prompt:** Enter a stock ticker
+- **Output:** Analyst/Researcher group chat, final report
+  
 ---
 
 ### 3. Running All Implementations

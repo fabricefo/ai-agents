@@ -2,9 +2,9 @@ from crewai import Task
 
 # Handle both relative and absolute imports
 try:
-    from .agents import research_analyst, investment_stratergist, report_writer
+    from .agents import research_analyst, investment_strategist, report_writer
 except ImportError:
-    from agents import research_analyst, investment_stratergist, report_writer
+    from agents import research_analyst, investment_strategist, report_writer
 
 # --- Define Tasks ---
 research_task = Task(
@@ -23,7 +23,7 @@ analysis_task = Task(
         "Conclude with a clear 'buy', 'sell', or 'hold' recommendation. "
     ),
     expected_output="A clear analysis and a buy/sell/hold recommendation with a detailed justification.",
-    agent=investment_stratergist
+    agent=investment_strategist
 )
 
 report_task = Task(

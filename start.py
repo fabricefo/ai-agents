@@ -26,30 +26,21 @@ if __name__ == "__main__":
     print("\n[bold yellow]✅ --- CREWAI FINAL RESULTS ---[/bold yellow]")
     print("=" * 50)
     print("CrewAI Analysis complete. Review the final report above.")
-    print(f"Ticker: {crewai_results.get('ticker', 'N/A')}")
     print(f"Analysis: {crewai_results.get('analysis', 'N/A')[:50]}")
-    print(f"Recommendation: {crewai_results.get('recommendation', 'N/A')[:50]}")
     with open("results_CrewAI.md", "x", encoding="utf-8") as f:
         f.write(f"Analysis: {crewai_results.get('analysis', 'N/A')}")
-        f.write(f"Recommendation: {crewai_results.get('recommendation', 'N/A')}")
 
 
     print("=" * 50)
     print("\n[bold yellow]✅ --- AUTOGEN FINAL RESULTS ---[/bold yellow]")
     print("=" * 50)
-    print(f"Ticker: {autogen_results.get('ticker', 'N/A')}")
-    print(f"Analysis: {autogen_results.get('analysis', 'N/A')}")
-    print(f"Recommendation: {autogen_results.get('recommendation', 'N/A')}")
+    print(f"Analysis: {autogen_results}")
     with open("results_Autogen.md", "x", encoding="utf-8") as f:
-        f.write(f"Analysis: {autogen_results.get('analysis', 'N/A')}")
-        f.write(f"Recommendation: {autogen_results.get('recommendation', 'N/A')}")
+        f.write(f"Analysis: {autogen_results}")
 
     print("=" * 50)
     print("\n[bold yellow]✅ --- LANGGRAPH FINAL RESULTS ---[/bold yellow]")
     print("=" * 50)
-    print(f"Ticker: {langgraph_results.get('ticker', 'N/A')}")
-    print(f"Analysis: {langgraph_results.get('analysis', 'N/A')}")
-    print(f"Recommendation: {langgraph_results.get('recommendation', 'N/A')}")
+    print(f"Analysis: {langgraph_results}")
     with open("results_Langgraph.md", "x", encoding="utf-8") as f:
-        f.write(f"Analysis: {langgraph_results.get('analysis', 'N/A')}")
-        f.write(f"Recommendation: {langgraph_results.get('recommendation', 'N/A')}")
+        f.write(f"Analysis: {langgraph_results}")

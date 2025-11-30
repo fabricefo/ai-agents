@@ -13,7 +13,7 @@ except ImportError:
 # Load environment variables
 load_dotenv()
 
-def run_langgraph(ticker):
+def run_langgraph(ticker: str):
     print(f"[bold blue]Run Langgraph[/bold blue]")
     app = create_workflow()
     initial_state: StockAnalysisState = {"ticker": ticker}

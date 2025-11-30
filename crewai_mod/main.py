@@ -5,21 +5,21 @@ from rich import print
 
 # Handle both relative and absolute imports
 try:
-    from .agents import research_analyst, investment_stratergist, report_writer
+    from .agents import research_analyst, investment_strategist, report_writer
     from .tasks import research_task, analysis_task, report_task
 except ImportError:
-    from agents import research_analyst, investment_stratergist, report_writer
+    from agents import research_analyst, investment_strategist, report_writer
     from tasks import research_task, analysis_task, report_task
 
 load_dotenv()
 
-def run_crewai(stock_ticker):
+def run_crewai(stock_ticker: str):
     print(f"[bold blue]Run CrewAI[/bold blue]")
 
     # Create the crew with the defined agents and tasks
     stock_crew = Crew(
         name="Stock Analysis Crew",
-        agents=[research_analyst, investment_stratergist, report_writer],
+        agents=[research_analyst, investment_strategist, report_writer],
         tasks=[research_task, analysis_task, report_task],
         process=Process.sequential,
         verbose=False,
@@ -47,6 +47,4 @@ if __name__ == "__main__":
     print("\n[bold yellow]✅ --- FINAL RESULTS ---[/bold yellow]")
     print("=" * 50)
     print("Analysis complete. Review the final report above.")
-    print(f"Ticker: {results.get('ticker', 'N/A')}")
     print(f"Analysis: {results.get('analysis', 'N/A')}")
-    print(f"Recommendation: {results.get('recommendation', 'N/A')}")

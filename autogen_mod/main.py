@@ -13,7 +13,7 @@ except ImportError:
 # --- Load environment variables ---
 load_dotenv()
 
-def run_autogen(ticker):
+def run_autogen(ticker: str):
     print(f"[bold blue]Run Autogen[/bold blue]")
 
     # --- Define agents ---
@@ -50,6 +50,4 @@ if __name__ == "__main__":
     print("\n[bold yellow]✅ --- FINAL RESULTS ---[/bold yellow]")
     print("=" * 50)
     print("Analysis complete. Review the final report above.")
-    print(f"Ticker: {results.get('ticker', 'N/A')}")
-    print(f"Analysis: {results.get('analysis', 'N/A')}")
-    print(f"Recommendation: {results.get('recommendation', 'N/A')}")
+    print(f"Analysis: {results}")

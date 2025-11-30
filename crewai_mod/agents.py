@@ -30,8 +30,8 @@ research_analyst = Agent(
     verbose=True
 )
 
-investment_stratergist = Agent(
-    role='Chief Investment Stratergist',
+investment_strategist = Agent(
+    role='Chief Investment Strategist',
     goal='Analyze research to formulate an investment recommendation.',
     backstory=(
         "An expert stratergist with a deep understanding of market dynamics, able to "
