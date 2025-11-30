@@ -8,4 +8,4 @@ from autogen.main import run_langgraph
 if __name__ == "__main__":
     crewai_results = run_crewai()
     # autogen_results = run_autogen()
-    # langgraph_results = run_langgraph()
+    langgraph_results = run_langgraph()
