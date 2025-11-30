@@ -1,6 +1,6 @@
 import os
-from langchain_groq import ChatGroq
 from pydantic import SecretStr
+from langchain_openai import ChatOpenAI
 
 # Handle both relative and absolute imports
 try:
@@ -11,11 +11,11 @@ except ImportError:
     from state import StockAnalysisState
 
 # Initialize the LLM once here for all nodes
-groq_api_key = os.getenv("GROQ_API_KEY")
-llm = ChatGroq(
-    model="llama-3.3-70b-versatile",
-    api_key=groq_api_key
-) if groq_api_key else None
+openai_api_key = os.getenv("OPENAI_API_KEY")
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    api_key=openai_api_key
+) if openai_api_key else None
 
 def research_node(state: StockAnalysisState):
     print("\n--- RESEARCHING STOCK AND NEWS ---")

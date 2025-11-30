@@ -12,9 +12,8 @@ except ImportError:
 
 load_dotenv()
 
-def run_crewai():
-    # Get user input for the stock ticker
-    stock_ticker = input("Enter the stock ticker you want to analyze (e.g. NVDA, AMD): ").upper()
+def run_crewai(stock_ticker):
+    print(f"[bold blue]Run CrewAI[/bold blue]")
 
     # Create the crew with the defined agents and tasks
     stock_crew = Crew(
@@ -22,7 +21,7 @@ def run_crewai():
         agents=[research_analyst, investment_stratergist, report_writer],
         tasks=[research_task, analysis_task, report_task],
         process=Process.sequential,
-        verbose=True,
+        verbose=False,
         max_rpm=5000
     )
 
@@ -35,6 +34,18 @@ def run_crewai():
 
 # --- Main execution block ---
 if __name__ == "__main__":
-    result = run_crewai()
-    print("\n\n--- FINAL REPORT (CrewAI with Groq) ---")
-    print(result)
+    print("=" * 50)
+    print("[bold yellow] 📈CrewAI Stock Analyst[/bold yellow]")
+    print("=" * 50)
+    
+    # Get user input for the stock ticker
+    stock_ticker = input("Enter the stock ticker you want to analyze (e.g. NVDA, AMD): ").upper()
+    results= run_crewai(stock_ticker)
+
+    print("=" * 50)
+    print("\n[bold yellow]✅ --- FINAL RESULTS ---[/bold yellow]")
+    print("=" * 50)
+    print("Analysis complete. Review the final report above.")
+    print(f"Ticker: {results.get('ticker', 'N/A')}")
+    print(f"Analysis: {results.get('analysis', 'N/A')}")
+    print(f"Recommendation: {results.get('recommendation', 'N/A')}")

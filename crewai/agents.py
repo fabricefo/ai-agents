@@ -10,8 +10,8 @@ except ImportError:
 # --- Define the LLM for all agents --- 
 openai_llm = LLM(
     api_key=os.getenv("OPEN_API_KEY"),
-    model="gpt-4.1-mini",  
-    temperature=0.1
+    model="gpt-4o-mini",  
+    temperature=0
 )
 
 # --- Define Agents ---
