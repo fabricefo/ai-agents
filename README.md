@@ -85,16 +85,87 @@ Run : ```docker-compose run stock-analysis```
 
 ## 🧩 Framework Comparison Table
 
-| Feature                | CrewAI                | LangGraph                | AutoGen                  |
-|------------------------|----------------------|--------------------------|--------------------------|
-| **Orchestration**      | Sequential pipeline  | State graph (DAG)        | Group chat (conversational) |
-| **Agent Roles**        | Explicit, role-based | Node-based, flexible     | Conversational, flexible |
-| **Task Flow**          | Linear, step-by-step | Custom graph transitions | Multi-turn dialogue      |
-| **Extensibility**      | Add agents/tasks     | Add nodes/edges          | Add agents, chat logic   |
-| **Best For**           | Business workflows   | Complex dependencies     | Dynamic collaboration    |
-| **Code Structure**     | agents.py, tasks.py, tools.py | nodes.py, state.py, tools.py | agents.py, workflow.py, config.py |
-| **Learning Curve**     | Low/Medium           | Medium/High              | Medium                   |
-| **Output**             | Executive report     | Analysis + recommendation| Chat log + report        |
+### 1) General
+
+| Feature                | **CrewAI**                 | **LangGraph**                | **AutoGen**                    | **Agno**                         | **ADK**                         |
+|------------------------|----------------------------|------------------------------|--------------------------------|-----------------------------------|----------------------------------|
+| **Orchestration**      | Sequential pipeline        | State graph (DAG)            | Group chat (multi-agent)       | Declarative agent workflow        | Declarative modular pipeline     |
+| **Agent Roles**        | Explicit agents + tasks    | Nodes as agents/tools        | Conversation-driven agents     | Role-based modular agents         | Explicit agents + tools          |
+| **Task Flow**          | Linear, step-by-step       | Dynamic transitions, loops   | Multi-turn collaborative chat  | Sequential or parallel pipelines  | Sequential pipeline              |
+| **Extensibility**      | Add agents / tasks easily  | Add nodes, edges, memory     | Add agents, tools, chat rules  | Add agents, skills, providers     | Add agents, tools, adapters      |
+| **Best For**           | Business workflows         | Complex dependency graphs     | Dynamic team collaboration     | Product-ready agent workflows     | Lightweight agent pipelines      |
+| **Learning Curve**     | Low/Medium                 | Medium/High                  | Medium                         | Low/Medium                        | Low                              |
+| **Output Style**       | Executive report           | Analysis w/ structured steps | Chat log + synthesized report  | Structured final output           | Structured final output          |
+
+### 2) Architecture & Execution model
+
+| Dimension                        | CrewAI                              | LangGraph                              | AutoGen                                  | Agno                                  | ADK                                    |
+|----------------------------------|--------------------------------------|------------------------------------------|-------------------------------------------|----------------------------------------|------------------------------------------|
+| **Execution Model**              | Task list + agent executor           | Graph-based state machine / DAG          | Conversational multi-agent runtime        | Declarative pipeline (Agents + Tools)   | Declarative pipeline DSL                |
+| **Supports branching?**          | ❌ Non                                | ✅ Oui (if/else, loops, recursion)        | Limited (via agent messages)              | Partiel (via functions)                | ❌ Non                                   |
+| **Supports parallelism?**        | ❌ Pas natif                           | ✅ Oui                                    | Possible via async agents                 | Oui (async providers)                  | Non                                     |
+| **Memory system**                | Basic (context injection)             | Advanced (Graph memory, checkpoints)     | Chat history + external memory options     | Optional memory                        | Minimal                                 |
+| **Recoverability / Resume**      | ❌ Non                                | ✅ Oui (checkpointing)                    | Partiel (depends on orchestration)         | Oui (depends on implementation)        | Non                                     |
+
+
+### 3) Agents & Skills
+
+| Feature                       | CrewAI                                  | LangGraph                            | AutoGen                          | Agno                                        | ADK                              |
+|------------------------------|------------------------------------------|----------------------------------------|----------------------------------|----------------------------------------------|----------------------------------|
+| **Custom agent roles**       | Oui, explicites                          | Oui, via nodes                         | Oui, via conversational roles    | Oui, rôles + skills + tools                 | Oui                               |
+| **Tool Use / Function Calling** | Oui, facile                               | Oui, très avancé                        | Oui                             | Oui, modèle "providers" + tools             | Oui, simple                        |
+| **Skill Libraries**          | Oui (bientôt standardisées)               | Pas natif                               | Non standard                     | Oui (skills, plugins)                        | Faible                            |
+| **Concurrency**              | Non                                       | Oui                                     | Oui (multi-agent simultané)      | Oui                                         | Non                               |
+
+
+### 4) Use Cases / Ideals domains
+
+| Cas d’usage                     | CrewAI                                  | LangGraph                                 | AutoGen                               | Agno                                          | ADK                                   |
+|----------------------------------|------------------------------------------|---------------------------------------------|----------------------------------------|------------------------------------------------|----------------------------------------|
+| Workflows d’entreprise           | ⭐⭐⭐⭐⭐                                     | ⭐⭐⭐⭐                                       | ⭐⭐⭐                                     | ⭐⭐⭐⭐⭐                                         | ⭐⭐⭐⭐                                  |
+| Graphes complexes                | ⭐⭐                                        | ⭐⭐⭐⭐⭐ (best choice)                         | ⭐⭐                                      | ⭐⭐⭐                                          | ⭐⭐                                     |
+| Agents collaboratifs interactifs | ⭐⭐                                        | ⭐⭐⭐⭐                                       | ⭐⭐⭐⭐⭐ (best choice)                     | ⭐⭐⭐                                          | ⭐⭐                                     |
+| Pipelines ML / AI robustes       | ⭐⭐⭐                                      | ⭐⭐⭐⭐⭐                                       | ⭐⭐⭐⭐                                   | ⭐⭐⭐⭐⭐                                         | ⭐⭐⭐⭐                                  |
+| Rapports financiers               | ⭐⭐⭐⭐⭐                                     | ⭐⭐⭐⭐                                       | ⭐⭐⭐⭐                                   | ⭐⭐⭐⭐⭐                                         | ⭐⭐⭐⭐                                  |
+
+
+### 5) Benefits and limits
+
+**CrewAI**
++ Very easy to use
++ Ideal for business workflows
++ Highly readable agents
+- No complex graphs
+- No advanced state logic
+
+**LangGraph**
++ Most powerful for complex workflows
++ Supports loops, branches, memory
++ Ideal for RAG, ML pipelines, persistent agents
+- Harder to learn
+- Quite verbose
+
+**AutoGen**
++ Highly interactive agents
++ Unique 'Group Chat' mode
++ Flexible, adaptable
+- Less structured for linear workflows
+- Can become verbose
+
+**Agno**
++ Very clean, very modern
++ Agents + skills + providers (Tavily, SQL, YFinance)
++ Perfect for building complete 'AI Apps'
+- Community still growing
+- Less academic than LangGraph
+
+**ADK**
++ Minimalist, quick to deploy
++ Simple for fixed pipelines
++ Perfect for POCs
+- Less feature-rich
+- Not designed for complex workflows
+
 
 
 ---
@@ -103,9 +174,10 @@ Run : ```docker-compose run stock-analysis```
 - [CrewAI Documentation](https://docs.crewai.com/)
 - [LangGraph Documentation](https://langchain-ai.github.io/langgraph/)
 - [AutoGen Documentation](https://microsoft.github.io/autogen/)
+- [Agno Documentation](https://docs.agno.com/)
+- [Google ADK Documentation](hhttps://google.github.io/adk-docs/)
 
 ---
 
 **This project is a reference for anyone looking to build modular, multi-agent systems in Python using modern frameworks.**
 
-Original source : https://github.com/Vigneshmaradiya/ai-agent-comparison/
