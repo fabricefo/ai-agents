@@ -20,7 +20,6 @@ def run_langgraph(ticker: str):
     final_state = app.invoke(initial_state)
     return final_state
 
-
 # --- Run the workflow ---
 if __name__ == "__main__":
     print("=" * 50)
@@ -28,13 +27,16 @@ if __name__ == "__main__":
     print("=" * 50)
     
     # Get user input for the stock ticker
-    stock_ticker = input("Enter ticker for which you want recommendations : ")
+    stock_ticker = input("Enter the stock ticker you want to analyze (e.g. NVDA, AMD): ").upper()
     results = run_langgraph(stock_ticker)
+
+    langgraph_analysis = results.get('analysis', 'N/A')
+    langgraph_recommendation = results.get('recommendation', 'N/A')
 
     print("=" * 50)
     print("\n[bold yellow]✅ --- FINAL RESULTS ---[/bold yellow]")
     print("=" * 50)
     print("Analysis complete. Review the final report above.")
     print(f"Ticker: {results.get('ticker', 'N/A')}")
-    print(f"Analysis: {results.get('analysis', 'N/A')}")
-    print(f"Recommendation: {results.get('recommendation', 'N/A')}")
+    print(f"Analysis: {langgraph_analysis}")
+    print(f"Recommendation: {langgraph_recommendation}")

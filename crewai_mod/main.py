@@ -29,13 +29,7 @@ def run_crewai(stock_ticker: str):
     # Use the kickoff method with a dynamic input
     # The {ticket} placeholder in the tasks will be replaced with the user's input.
     result = stock_crew.kickoff(inputs={"ticker": stock_ticker})
-    # Récupération des métriques d'usage si disponibles
-    usage_metrics = getattr(stock_crew, "usage_metrics", None)
-    # On prépare un dict avec les infos utiles
-    return {
-        "result": result,
-        "usage_metrics": usage_metrics
-    }
+    return result
 
 
 
@@ -54,15 +48,6 @@ if __name__ == "__main__":
     print("=" * 50)
     print("Analysis complete. Review the final report above.")
     # Affichage du résultat principal
-    analysis = results["result"].get("analysis", "N/A") if isinstance(results["result"], dict) else str(results["result"])
-    print(f"Analysis: {analysis}")
-    # Affichage des métriques de tokens si disponibles
-    usage = results.get("usage_metrics")
-    if usage:
-        print("\n[bold blue]Token usage metrics:[/bold blue]")
-        for attr in ["total_tokens", "prompt_tokens", "completion_tokens", "successful_requests"]:
-            value = getattr(usage, attr, None)
-            if value is not None:
-                print(f"  {attr.replace('_', ' ').capitalize()}: {value}")
-    else:
-        print("\n[bold blue]Token usage metrics not available.[/bold blue]")
+    crewai_analysis = results.get("analysis", "N/A") if isinstance(results, dict) else str(results)
+    print(f"Analysis: {crewai_analysis}")
+
