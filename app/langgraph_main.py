@@ -2,8 +2,22 @@
 import time
 import json
 from _common import fetch_financials, fetch_news_tavily, call_llm
+from langchain_openai import ChatOpenAI
+
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 FRAMEWORK = "langgraph"
+
+# --- Define the LLM for all agents --- 
+openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    raise ValueError("OPENAI_API_KEY environment variable is not set.")
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    api_key=openai_api_key
+) if openai_api_key else None
 
 def run_langgraph_analysis(ticker: str):
     t0 = time.perf_counter()

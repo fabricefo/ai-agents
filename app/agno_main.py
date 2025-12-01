@@ -2,8 +2,23 @@
 import time
 import json
 from _common import fetch_financials, fetch_news_tavily, call_llm
+from agno.models.openai import OpenAIChat
+
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 
 FRAMEWORK = "agno"
+
+# --- Define the LLM for all agents --- 
+openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    raise ValueError("OPENAI_API_KEY environment variable is not set.")
+llm = OpenAIChat(
+    id="gpt-4o-mini",
+    api_key=openai_api_key
+    )
 
 def run_agno_analysis(ticker: str):
     t0 = time.perf_counter()

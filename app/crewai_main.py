@@ -1,90 +1,182 @@
-# scripts/crewai_script.py
 import time
-import json
-from _common import fetch_financials, fetch_news_tavily, call_llm
+from crewai import Agent, Task, Crew, LLM
+import yfinance as yf
+from tavily import TavilyClient
+from openai import OpenAI
 
-FRAMEWORK = "crewai"
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-def run_crewai_analysis(ticker: str):
-    t0 = time.perf_counter()
-    agent_tokens = {}
-    agent_durations = {}
+FRAMEWORK = "CrewAI"
 
-    # Research
-    fin = fetch_financials(ticker)
-    news = fetch_news_tavily(f"{ticker} earnings news", max_results=5)
-    research_prompt = f"""CrewAI - research_analyst:
-Analyse le ticker {ticker} en synthèse.
+# --- Define the LLM for all agents --- 
+openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    raise ValueError("OPENAI_API_KEY environment variable is not set.")
+llm = LLM(
+    api_key=openai_api_key,
+    model="gpt-4o-mini",  
+    temperature=0
+)
 
-Données:
-{json.dumps(fin, ensure_ascii=False, indent=2)}
+# -------------------------
+# OPENAI CLIENT FOR TOKEN STATS
+# -------------------------
+client = OpenAI(api_key="YOUR_OPENAI_KEY")
 
-Actualités:
-{news}
-"""
-    messages = [
-        {"role": "system", "content": "Tu es research_analyst (CrewAI)."},
-        {"role": "user", "content": research_prompt}
-    ]
-    research_text, usage1, dur1 = call_llm(messages)
-    agent_tokens["research"] = usage1
-    agent_durations["research"] = dur1
-
-    # Strategy
-    strat_prompt = f"""CrewAI - investment_strategist:
-Sur la base de l'analyse suivante, fournis recommandations et allocation potentielle.
-{research_text}
-"""
-    messages = [
-        {"role": "system", "content": "Tu es investment_strategist (CrewAI)."},
-        {"role": "user", "content": strat_prompt}
-    ]
-    strat_text, usage2, dur2 = call_llm(messages)
-    agent_tokens["strategy"] = usage2
-    agent_durations["strategy"] = dur2
-
-    # Report
-    report_prompt = f"""CrewAI - report_writer:
-Compile un rapport final orienté investisseur.
-Research:
-{research_text}
-Strategy:
-{strat_text}
-"""
-    messages = [
-        {"role": "system", "content": "Tu es report_writer (CrewAI)."},
-        {"role": "user", "content": report_prompt}
-    ]
-    report_text, usage3, dur3 = call_llm(messages)
-    agent_tokens["report"] = usage3
-    agent_durations["report"] = dur3
-
-    total_duration = time.perf_counter() - t0
-
-    def safe_sum(k):
-        vals = []
-        for a in agent_tokens.values():
-            if a and a.get(k) is not None:
-                vals.append(int(a.get(k)))
-        return sum(vals) if vals else None
-
-    tokens_summary = {
-        "input": safe_sum("prompt_tokens"),
-        "output": safe_sum("completion_tokens"),
-        "total": safe_sum("total_tokens")
-    }
+def llm_call(model, prompt):
+    """
+    Wrapper that:
+      - calls the LLM
+      - returns text + token usage
+    """
+    response = client.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt}]
+    )
 
     return {
-        "result": report_text,
-        "tokens": tokens_summary,
-        "meta": {
-            "framework": FRAMEWORK,
-            "duration_seconds": round(total_duration, 3),
-            "agent_durations": {k: round(v, 3) for k, v in agent_durations.items()},
-            "agent_tokens": agent_tokens
-        }
+        "text": response.choices[0].message.content,
+        "tokens": response.usage.total_tokens
     }
 
+
+# -------------------------
+# TOOLS: Tavily + YFinance
+# -------------------------
+tavily = TavilyClient(api_key="YOUR_TAVILY_KEY")
+
+def search_news(ticker):
+    return tavily.search(query=f"financial news {ticker}")
+
+def fetch_yf_data(ticker):
+    T = yf.Ticker(ticker)
+    return {
+        "info": T.info,
+        "history": T.history(period="6mo").tail(10).to_dict()
+    }
+
+
+# -------------------------
+# AGENTS
+# -------------------------
+research_analyst = Agent(
+    name="Research Analyst",
+    role="Financial Data Research Agent",
+    goal="Gather news and market data for the stock.",
+    backstory="Expert in financial markets and data aggregation.",
+    llm="gpt-4o-mini",
+    verbose=True
+)
+
+investment_strategist = Agent(
+    name="Investment Strategist",
+    role="Financial Strategist",
+    goal="Analyze the stock fundamentals and risks.",
+    backstory="15 years of experience as a portfolio strategist.",
+    llm="gpt-4o-mini",
+    verbose=True
+)
+
+report_writer = Agent(
+    name="Report Writer",
+    role="Financial Report Writer",
+    goal="Synthesise the final report.",
+    backstory="Specialist in financial writing.",
+    llm="gpt-4o-mini",
+    verbose=True
+)
+
+
+# -------------------------
+# TASKS with custom timer + token capture
+# -------------------------
+def timed_task(task, context):
+    """
+    Executes a Crew task with:
+      - time measurement
+      - token measurement
+      - returns output + metrics
+    """
+    start = time.time()
+    result = task.execute(context=context)
+    end = time.time()
+
+    # Tokens extracted from LLM wrapper
+    tokens = result.token_usage if hasattr(result, "token_usage") else None
+
+    return {
+        "task_name": task.description[:50],
+        "result": result.output,
+        "time_seconds": round(end - start, 3),
+        "tokens": tokens
+    }
+
+
+task_research = Task(
+    description=(
+        "Collect Tavily news and YFinance stock data for {{ticker}}. "
+        "Return JSON with fields 'news' and 'yfinance'."
+    ),
+    agent=research_analyst,
+    tools=[search_news, fetch_yf_data],
+)
+
+task_strategy = Task(
+    description=(
+        "Analyze the previous task's JSON to evaluate valuation, risks, and opportunities."
+    ),
+    agent=investment_strategist,
+)
+
+task_report = Task(
+    description=(
+        "Write a final investment report based on the strategist's analysis."
+    ),
+    agent=report_writer,
+)
+
+
+# -------------------------
+# CREW WITHOUT MANAGER
+# -------------------------
+crew = Crew(
+    agents=[research_analyst, investment_strategist, report_writer],
+    tasks=[task_research, task_strategy, task_report],
+    verbose=True
+)
+
+
+# -------------------------
+# MAIN FUNCTION
+# -------------------------
+def run_crew_with_metrics(ticker: str):
+    context = {"ticker": ticker}
+    tasks = [task_research, task_strategy, task_report]
+
+    results = []
+    total_tokens = 0
+    total_time = 0
+
+    for t in tasks:
+        r = timed_task(t, context)
+        results.append(r)
+
+        if r["tokens"] is not None:
+            total_tokens += r["tokens"]
+
+        total_time += r["time_seconds"]
+
+        # Pass result as context to next task
+        context = r["result"]
+
+    return {
+        "ticker": ticker,
+        "task_results": results,
+        "total_tokens": total_tokens,
+        "total_time_seconds": round(total_time, 3)
+    }
 
 
 # -------------------------------------------------------
@@ -98,6 +190,6 @@ if __name__ == "__main__":
     print(f"[bold cyan]Start analysis for: {ticker}[/bold cyan]")
     print("=" * 50)
 
-    final_report = run_crewai_analysis(ticker)
+    final_report = run_crew_with_metrics(ticker)
     print("\n[bold cyan]📄 Final report :\n[/bold cyan]")
     print(final_report)

@@ -3,7 +3,22 @@ import time
 import json
 from _common import fetch_financials, fetch_news_tavily, call_llm
 
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+
 FRAMEWORK = "autogen"
+
+# --- Define the LLM for all agents --- 
+openai_api_key = os.getenv("OPENAI_API_KEY")
+if not openai_api_key:
+    raise ValueError("OPENAI_API_KEY environment variable is not set.")
+llm = LLM(
+    api_key=openai_api_key,
+    model="gpt-4o-mini",  
+    temperature=0
+)
 
 def run_autogen_analysis(ticker: str):
     t0 = time.perf_counter()
