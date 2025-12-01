@@ -1,11 +1,18 @@
+# LLM & Agents
+openai
+agno
 crewai
-langgraph
 autogen-agentchat
-autogen
-langchain-community
+langgraph
 langchain-openai
-yfinance
+
+# Utils
 tavily-python
+yfinance
+
+# LLM for ADK
+ai-engine-tools
+
+# Others
 python-dotenv
-pydantic
 rich

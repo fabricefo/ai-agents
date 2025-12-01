@@ -1,20 +1,24 @@
-# AI Agent Frameworks Comparison: CrewAI vs LangGraph vs AutoGen
+# AI Agent Frameworks Comparison: CrewAI vs LangGraph vs AutoGen vs Agno vs Google ADK
 
 This project demonstrates and compares three leading Python agent frameworks for orchestrating multi-agent financial analysis workflows:
 
 - **CrewAI**: Role-based, sequential agent orchestration
 - **LangGraph**: State-driven, graph-based agent workflows
 - **AutoGen**: Conversational, group-chat style agent collaboration
+- **Google ADK**
+- **Agno**
 
-All three frameworks are implemented to solve the same problem: **analyzing a stock's recent performance and generating an investment recommendation (BUY/SELL/HOLD) with rationale**.
+All frameworks are implemented to solve the same problem: **analyzing a stock's recent performance and generating an investment recommendation (BUY/SELL/HOLD) with rationale**.
 
 ## 📦 Project Structure
 
 ```
 ai-agent-comparision/
-├── crewai/      # CrewAI implementation
-├── langgraph/   # LangGraph implementation
-├── autogen/     # AutoGen implementation
+├── crewai/       # CrewAI implementation
+├── langgraph/    # LangGraph implementation
+├── autogen/      # AutoGen implementation
+├── agno/         # Agno implementation
+├── adk/          # ADK implementation
 ├── requirements.txt
 ├── .env.example
 └──  README.md
@@ -72,6 +76,12 @@ uv run agon_mod/main.py
 ```bash
 uv run start.py
 ```
+
+### 4. Docker
+
+Build : ```docker-compose build```
+Run : ```docker-compose run stock-analysis```
+
 
 ## 🧩 Framework Comparison Table
 
