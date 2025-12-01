@@ -99,5 +99,5 @@ if __name__ == "__main__":
     print("=" * 50)
 
     final_report = run_crewai_analysis(ticker)
-    print("\n[bold cyan]📄 Rapport Final :\n[/bold cyan]")
+    print("\n[bold cyan]📄 Final report :\n[/bold cyan]")
     print(final_report)

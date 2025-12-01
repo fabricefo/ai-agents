@@ -62,7 +62,7 @@ def run_all(ticker: str):
 
     # Export summary global
     export_json(os.path.join(OUTPUT_DIR, "summary.json"), summary)
-    print("\n✅ All resultst exported in ./results")
+    print("\n✅ All results exported in ./results")
 
 # --------------------------------------------------------------------
 # EXECUTION
@@ -77,3 +77,7 @@ if __name__ == "__main__":
     print("=" * 50)
 
     run_all(ticker)
+
+    print("=" * 50)
+    print(f"[bold cyan]End of analysis for: {ticker}[/bold cyan]")
+    print("=" * 50)
