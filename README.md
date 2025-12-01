@@ -14,14 +14,15 @@ All frameworks are implemented to solve the same problem: **analyzing a stock's 
 
 ```
 ai-agent-comparision/
-├── crewai/       # CrewAI implementation
-├── langgraph/    # LangGraph implementation
-├── autogen/      # AutoGen implementation
-├── agno/         # Agno implementation
-├── adk/          # ADK implementation
+├── crewai_mod/       # CrewAI implementation
+├── langgraph_mod/    # LangGraph implementation
+├── autogen_mod/      # AutoGen implementation
+├── agno_mod/         # Agno implementation
+├── adk_mod/          # ADK implementation
 ├── requirements.txt
 ├── .env.example
 └──  README.md
+└──  start.py
 
 ```
 
@@ -64,7 +65,7 @@ uv run autogen_mod/main.py
 
 #### Agno
 ```bash
-uv run agon_mod/main.py
+uv run agno_mod/main.py
 ```
 - **Prompt:** Enter a stock ticker
 - **Output:** Analyst/Researcher group chat, final report

@@ -5,6 +5,7 @@ from autogen_mod.main import run_autogen
 from rich import print
 import os
 from dotenv import load_dotenv
+import csv
 
 # Load environment variables
 load_dotenv()
@@ -17,7 +18,8 @@ if __name__ == "__main__":
     print("=" * 50)
     print(f"[bold cyan]Start analysis for: {stock_ticker}[/bold cyan]")
     print("=" * 50)
-    
+
+    results = []    
     crewai_results = run_crewai(stock_ticker)
     autogen_results = run_autogen(stock_ticker)
     langgraph_results = run_langgraph(stock_ticker)
@@ -65,3 +67,6 @@ if __name__ == "__main__":
     print(f"Analysis: {langgraph_results}")
     with open("results_Langgraph.md", "x", encoding="utf-8") as f:
         f.write(f"Analysis: {langgraph_results}")
+
+
+
