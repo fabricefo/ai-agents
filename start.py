@@ -22,15 +22,33 @@ if __name__ == "__main__":
     autogen_results = run_autogen(stock_ticker)
     langgraph_results = run_langgraph(stock_ticker)
 
+    # ======================================================================
+    # Run CrewAI
+    # ======================================================================
     print("=" * 50)
     print("\n[bold yellow]✅ --- CREWAI FINAL RESULTS ---[/bold yellow]")
     print("=" * 50)
     print("CrewAI Analysis complete. Review the final report above.")
     print(f"Analysis: {crewai_results.get('analysis', 'N/A')[:50]}")
+    analysis = crewai_results["result"].get("analysis", "N/A") if isinstance(results["result"], dict) else str(results["result"])
+    print(f"Analysis: {analysis}")
+    # Affichage des métriques de tokens si disponibles
+    usage = crewai_results.get("usage_metrics")
+    if usage:
+        print("\n[bold blue]Token usage metrics:[/bold blue]")
+        for attr in ["total_tokens", "prompt_tokens", "completion_tokens", "successful_requests"]:
+            value = getattr(usage, attr, None)
+            if value is not None:
+                print(f"  {attr.replace('_', ' ').capitalize()}: {value}")
+    else:
+        print("\n[bold blue]Token usage metrics not available.[/bold blue]")
+
     with open("results_CrewAI.md", "x", encoding="utf-8") as f:
         f.write(f"Analysis: {crewai_results.get('analysis', 'N/A')}")
 
-
+    # ======================================================================
+    # Run Autogen
+    # ======================================================================
     print("=" * 50)
     print("\n[bold yellow]✅ --- AUTOGEN FINAL RESULTS ---[/bold yellow]")
     print("=" * 50)
@@ -38,6 +56,9 @@ if __name__ == "__main__":
     with open("results_Autogen.md", "x", encoding="utf-8") as f:
         f.write(f"Analysis: {autogen_results}")
 
+    # ======================================================================
+    # Run LangGraph
+    # ======================================================================
     print("=" * 50)
     print("\n[bold yellow]✅ --- LANGGRAPH FINAL RESULTS ---[/bold yellow]")
     print("=" * 50)

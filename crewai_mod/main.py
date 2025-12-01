@@ -26,10 +26,16 @@ def run_crewai(stock_ticker: str):
         max_rpm=5000
     )
 
-    # Use the kikoff method with a dynamic input
+    # Use the kickoff method with a dynamic input
     # The {ticket} placeholder in the tasks will be replaced with the user's input.
     result = stock_crew.kickoff(inputs={"ticker": stock_ticker})
-    return result
+    # Récupération des métriques d'usage si disponibles
+    usage_metrics = getattr(stock_crew, "usage_metrics", None)
+    # On prépare un dict avec les infos utiles
+    return {
+        "result": result,
+        "usage_metrics": usage_metrics
+    }
 
 
 
@@ -41,10 +47,22 @@ if __name__ == "__main__":
     
     # Get user input for the stock ticker
     stock_ticker = input("Enter the stock ticker you want to analyze (e.g. NVDA, AMD): ").upper()
-    results= run_crewai(stock_ticker)
+    results = run_crewai(stock_ticker)
 
     print("=" * 50)
     print("\n[bold yellow]✅ --- FINAL RESULTS ---[/bold yellow]")
     print("=" * 50)
     print("Analysis complete. Review the final report above.")
-    print(f"Analysis: {results.get('analysis', 'N/A')}")
+    # Affichage du résultat principal
+    analysis = results["result"].get("analysis", "N/A") if isinstance(results["result"], dict) else str(results["result"])
+    print(f"Analysis: {analysis}")
+    # Affichage des métriques de tokens si disponibles
+    usage = results.get("usage_metrics")
+    if usage:
+        print("\n[bold blue]Token usage metrics:[/bold blue]")
+        for attr in ["total_tokens", "prompt_tokens", "completion_tokens", "successful_requests"]:
+            value = getattr(usage, attr, None)
+            if value is not None:
+                print(f"  {attr.replace('_', ' ').capitalize()}: {value}")
+    else:
+        print("\n[bold blue]Token usage metrics not available.[/bold blue]")
