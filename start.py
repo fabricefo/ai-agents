@@ -79,7 +79,9 @@ if __name__ == "__main__":
     print("\n[bold green]All analyses complete. Results saved in outputs/ folder.[/bold green]")
     print("=" * 50)
 
+    # ======================================================================
     # Call LLM to summarize results
+    # ======================================================================
     summary_prompt = f"Summarize and compare the following stock analyses for {stock_ticker}:\n\nCrewAI Analysis:\n{crewai_analysis}\n\nLangGraph Analysis:\n{langgraph_analysis}\n\nProvide a concise summary highlighting key insights from both analyses."
     summary = llm_call(summary_prompt)
     print("\n[bold magenta]📝 --- SUMMARY OF ALL ANALYSES ---[/bold magenta]")

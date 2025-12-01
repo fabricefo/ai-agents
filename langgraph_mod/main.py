@@ -28,15 +28,14 @@ if __name__ == "__main__":
     
     # Get user input for the stock ticker
     stock_ticker = input("Enter the stock ticker you want to analyze (e.g. NVDA, AMD): ").upper()
-    results = run_langgraph(stock_ticker)
+    langgraph_results = run_langgraph(stock_ticker)
 
-    langgraph_analysis = results.get('analysis', 'N/A')
-    langgraph_recommendation = results.get('recommendation', 'N/A')
+    langgraph_analysis = langgraph_results.get('analysis', 'N/A')
+    langgraph_recommendation = langgraph_results.get('recommendation', 'N/A')
 
     print("=" * 50)
     print("\n[bold yellow]✅ --- FINAL RESULTS ---[/bold yellow]")
     print("=" * 50)
     print("Analysis complete. Review the final report above.")
-    print(f"Ticker: {results.get('ticker', 'N/A')}")
     print(f"Analysis: {langgraph_analysis}")
     print(f"Recommendation: {langgraph_recommendation}")

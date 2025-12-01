@@ -41,13 +41,13 @@ if __name__ == "__main__":
     
     # Get user input for the stock ticker
     stock_ticker = input("Enter the stock ticker you want to analyze (e.g. NVDA, AMD): ").upper()
-    results = run_crewai(stock_ticker)
+    crewai_results = run_crewai(stock_ticker)
 
     print("=" * 50)
     print("\n[bold yellow]✅ --- FINAL RESULTS ---[/bold yellow]")
     print("=" * 50)
     print("Analysis complete. Review the final report above.")
     # Affichage du résultat principal
-    crewai_analysis = results.get("analysis", "N/A") if isinstance(results, dict) else str(results)
+    crewai_analysis = crewai_results.get("analysis", "N/A") if isinstance(crewai_results, dict) else str(crewai_results)
     print(f"Analysis: {crewai_analysis}")
 
