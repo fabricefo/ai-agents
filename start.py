@@ -51,13 +51,13 @@ if __name__ == "__main__":
     # ======================================================================
     # Run Autogen
     # ======================================================================
-    # autogen_results = run_autogen(stock_ticker)
-    # print("=" * 50)
-    # print("\n[bold yellow]✅ --- AUTOGEN FINAL RESULTS ---[/bold yellow]")
-    # print("=" * 50)
-    # print(f"Analysis: {autogen_results}")
-    # with open("outputs/results_Autogen.md", "x", encoding="utf-8") as f:
-    #     f.write(f"Analysis: {autogen_results}")
+    autogen_results = run_autogen(stock_ticker)
+    print("=" * 50)
+    print("\n[bold yellow]✅ --- AUTOGEN FINAL RESULTS ---[/bold yellow]")
+    print("=" * 50)
+    print(f"Analysis: {autogen_results}")
+    with open("outputs/results_Autogen.md", "x", encoding="utf-8") as f:
+        f.write(f"Analysis: {autogen_results}")
 
     # ======================================================================
     # Run LangGraph
